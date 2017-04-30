@@ -1,20 +1,19 @@
-package articles;
+package hello;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
 
 /**
  * The persistent class for the article database table.
  * 
  */
 @Entity
-@NamedQuery(name="Article.findAll", query="SELECT a FROM Article a")
+@NamedQuery(name = "Article.findAll", query = "SELECT a FROM Article a")
 public class Article implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int idArticle;
 
 	private byte acommander;
@@ -27,11 +26,11 @@ public class Article implements Serializable {
 
 	private String designation;
 
-	private byte expirable;
+	private Boolean expirable;
 
 	private String famille;
 
-	private byte inventaire;
+	private Boolean inventaire;
 
 	private String marque;
 
@@ -66,7 +65,7 @@ public class Article implements Serializable {
 
 	private String unite;
 
-	private byte utilise;
+	private Boolean utilise;
 
 	public Article() {
 	}
@@ -119,11 +118,11 @@ public class Article implements Serializable {
 		this.designation = designation;
 	}
 
-	public byte getExpirable() {
+	public Boolean getExpirable() {
 		return this.expirable;
 	}
 
-	public void setExpirable(byte expirable) {
+	public void setExpirable(Boolean expirable) {
 		this.expirable = expirable;
 	}
 
@@ -135,11 +134,11 @@ public class Article implements Serializable {
 		this.famille = famille;
 	}
 
-	public byte getInventaire() {
+	public Boolean getInventaire() {
 		return this.inventaire;
 	}
 
-	public void setInventaire(byte inventaire) {
+	public void setInventaire(Boolean inventaire) {
 		this.inventaire = inventaire;
 	}
 
@@ -271,11 +270,11 @@ public class Article implements Serializable {
 		this.unite = unite;
 	}
 
-	public byte getUtilise() {
+	public Boolean getUtilise() {
 		return this.utilise;
 	}
 
-	public void setUtilise(byte utilise) {
+	public void setUtilise(Boolean utilise) {
 		this.utilise = utilise;
 	}
 

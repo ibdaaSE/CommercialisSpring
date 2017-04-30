@@ -1,19 +1,86 @@
 <html>
 <head>
-<title>Insert title here</title>
+<title>Commercialis</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<script src="/webjars/angularjs/1.4.9/angularjs.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="/webjars/angular-material/1.1.3/angular-material.css"
+	type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
-<body>
-<h1>LISTE DES ARTICLES DISPONIBLES</h1>
-<div ng-app>
+<body ng-app="crudApp">
+	<md-content ng-controller="listController" layout-padding>
 
-<p>Name: <input type="text" ng-model="name"></p>
-<p>You wrote: {{ name }}</p> 
+	<p ng-controller="MainCtrl">Hello {{name}}! {{online}}</p>
 
-</div>
-<ul>
-	<li></li>
-</ul>
+	<div layout="row">
+
+		<div flex="20">
+			<h5>
+				<br> <b>LISTE DES ARTICLES</b>
+			</h5>
+		</div>
+		<md-input-container flex="20"> <input
+			id="searchField" type="text" class="validate" ng-model="filter"
+			ng-change="filterArticles()"> <label for="searchField">Rechercher</label>
+		</md-input-container>
+	</div>
+
+	<md-content>
+	<div layout="row" flex>
+		<h4 layout="column" flex>Article</h4>
+		<h4 layout="column" flex="10" layout-align="right end">Quantité</h4>
+		<h4 layout="column" flex="10" layout-align="right end">Prix
+			pulique</h4>
+	</div>
+
+	<md-divider></md-divider>
+
+	<div layout="row" ng-repeat="article in articles" flex>
+		<p layout="column" flex>
+			{{article.reference}}<br>{{article.designation}}
+		</p>
+		<p layout="column" flex="10" layout-align="right end">{{article.qtestock
+			| number:2}}</p>
+		<p layout="column" flex="10" layout-align="right end">{{article.prixpublic
+			| number:2}}</p>
+	</div>
+	</md-content> </md-content>
+	<script src="/webjars/angularjs/1.5.5/angular.js"></script>
+	<script src="/webjars/angularjs/1.5.5/angular-animate.js"></script>
+	<script src="/webjars/angularjs/1.5.5/angular-aria.js"></script>
+	<script src="/webjars/angularjs/1.5.5/angular-messages.js"></script>
+	<script src="/webjars/angular-material/1.1.3/angular-material.js"></script>
+	<script type="text/javascript">
+		var app = angular.module('crudApp', [ 'ngMaterial' ]).controller(
+				'listController',
+				function($scope, $http) {
+					$http.get('/articles').success(function(data) {
+						$scope.articles = data;
+					})
+					$scope.filterArticles = function() {
+						$http.get('/articles/' + $scope.filter).success(
+								function(data) {
+									$scope.articles = data;
+								})
+					};
+				});
+
+		app.controller('MainCtrl', function($scope) {
+			$scope.name = 'World';
+		});
+
+		app.run(function($window, $rootScope) {
+			$rootScope.online = navigator.onLine;
+			$window.addEventListener("offline", function() {
+				$rootScope.$apply(function() {
+					$rootScope.online = false;
+				});
+			}, false);
+			$window.addEventListener("online", function() {
+				$rootScope.$apply(function() {
+					$rootScope.online = true;
+				});
+			}, false);
+		});
+	</script>
 </body>
 </html>
