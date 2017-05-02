@@ -6,64 +6,146 @@
 <link href="/webjars/angular-material/1.1.3/angular-material.css"
 	type="text/css" rel="stylesheet" media="screen,projection" />
 </head>
-<body ng-app="crudApp">
-	<md-content ng-controller="listController" layout-padding>
+<body ng-app="crudApp" ng-cloak>
+	<div ng-controller="listController" layout="column" layout-fill>
 
-	<p ng-controller="MainCtrl">Hello {{name}}! {{online}}</p>
-
-	<div layout="row">
-
-		<div flex="20">
-			<h5>
-				<br> <b>LISTE DES ARTICLES</b>
-			</h5>
+		<md-toolbar>
+		<div class="md-toolbar-tools">
+			<md-button class="md-icon-button" aria-label="More"> <md-icon
+				md-svg-icon="img/icons/more_vert.svg"></md-icon> </md-button>
+			<md-button aria-label="Vente"> Vente </md-button>
+			<md-button aria-label="Achat"> Achat </md-button>
+			<md-button aria-label="Stock"> Stock </md-button>
+			<md-button aria-label="Clients et fournisseurs"> Clients
+			et fournisseurs </md-button>
+			<md-button aria-label="Stock"> Stock </md-button>
+			<md-button aria-label="Statistiques"> Stock </md-button>
+			<span flex></span>
+			<md-button class="md-raised" aria-label="Learn More">
+			Options </md-button>
+			<md-button class="md-fab md-mini" aria-label="Favorite">
+			<md-icon md-svg-icon="img/icons/favorite.svg"></md-icon> </md-button>
 		</div>
-		<md-input-container flex="20"> <input
-			id="searchField" type="text" class="validate" ng-model="filter"
-			ng-change="filterArticles()"> <label for="searchField">Rechercher</label>
-		</md-input-container>
-	</div>
+		</md-toolbar>
 
-	<md-content>
-	<div layout="row" flex>
-		<h4 layout="column" flex>Article</h4>
-		<h4 layout="column" flex="10" layout-align="right end">Quantité</h4>
-		<h4 layout="column" flex="10" layout-align="right end">Prix
-			pulique</h4>
-	</div>
 
-	<md-divider></md-divider>
+		<div layout="row"
+			style="background: white; padding: 0px 15px 0px 15px;">
 
-	<div layout="row" ng-repeat="article in articles" flex>
-		<p layout="column" flex>
-			{{article.reference}}<br>{{article.designation}}
-		</p>
-		<p layout="column" flex="10" layout-align="right end">{{article.qtestock
-			| number:2}}</p>
-		<p layout="column" flex="10" layout-align="right end">{{article.prixpublic
-			| number:2}}</p>
+			<h3 layout="column">
+				<span style="color: black">Gestion du stock</span>
+			</h3>
+			<span flex></span>
+			<div layout="column" layout-align="center" flex="30">
+				<md-input-container
+					style="padding: 0px;margin: 0px;min-height: 0px !important;max-height: 30px;">
+				<label for="searchField">Rechercher</label> <input id="searchField"
+					type="text" class="validate" ng-model="filter"
+					ng-change="filterArticles()"> </md-input-container>
+			</div>
+		</div>
+
+
+		<div layout="row"
+			style="background: white; padding: 0px 15px 0px 15px; margin: 0px;">
+			<h4 layout="row" flex="20" style="margin: 10px 0px 10px 0px;">
+				<span>Référence</span>
+			</h4>
+			<h4 layout="row" flex style="margin: 10px 0px 10px 0px;">
+				<span>Designation</span>
+			</h4>
+			<h4 layout="row" flex="10" layout-align="end"
+				style="margin: 10px 0px 10px 0px;">
+				<span>Quantité</span>
+			</h4>
+			<h4 layout="row" flex="10" layout-align="end"
+				style="margin: 10px 0px 10px 0px;">
+				<span>Prix publique</span>
+			</h4>
+		</div>
+
+		<md-divider></md-divider>
+
+
+		<div flex layout="column" layout-fill>
+			<md-content scrolly="getNextPage()"> <md-list-item
+				class="secondary-button-padding" ng-click="doPrimaryAction($event)"
+				ng-repeat="article in articles" flex>
+			<p layout="row" flex="20">
+				<span>{{article.reference}} </span>
+			</p>
+			<p layout="row" flex>
+				<span>{{article.designation}}</span>
+			</p>
+			<p layout="row" flex="10" layout-align="end">
+				<span>{{article.qtestock | number:2}}</span>
+			</p>
+			<p layout="row" flex="10" layout-align="end">
+				<span>{{article.prixpublic | number:2}}</span>
+			</p>
+			<md-divider></md-divider> </md-list-item> </md-content>
+		</div>
 	</div>
-	</md-content> </md-content>
 	<script src="/webjars/angularjs/1.5.5/angular.js"></script>
 	<script src="/webjars/angularjs/1.5.5/angular-animate.js"></script>
 	<script src="/webjars/angularjs/1.5.5/angular-aria.js"></script>
 	<script src="/webjars/angularjs/1.5.5/angular-messages.js"></script>
 	<script src="/webjars/angular-material/1.1.3/angular-material.js"></script>
 	<script type="text/javascript">
+		// init module + filter controller
 		var app = angular.module('crudApp', [ 'ngMaterial' ]).controller(
 				'listController',
 				function($scope, $http) {
-					$http.get('/articles').success(function(data) {
+					$http.get('/articles?filter=&pageIndex=0').success(function(data) {
+						$scope.pageIndex = 0;
 						$scope.articles = data;
+						$scope.pageIndex = $scope.pageIndex = data.length;
+						console.log('init index : ' + $scope.pageIndex);
 					})
 					$scope.filterArticles = function() {
-						$http.get('/articles/' + $scope.filter).success(
+						$http.get('/articles?filter=' + $scope.filter + '&pageIndex=0').success(
 								function(data) {
+									$scope.pageIndex = 0;
 									$scope.articles = data;
+									$scope.pageIndex = $scope.pageIndex + data.length;
+									console.log('filter index : ' + $scope.pageIndex);
+								})
+					};
+					$scope.getNextPage = function() {
+						$http.get('/articles?filter=' + ($scope.filter == null ? '' : $scope.filter) + '&pageIndex=' + $scope.pageIndex).success(
+								function(nextPageContent) {
+									console.log('/articles?filter=' + ($scope.filter == null ? '' : $scope.filter) + '&pageIndex=' + $scope.pageIndex);
+									$scope.pageIndex = $scope.pageIndex + nextPageContent.length;
+									for (i in nextPageContent) {
+								        $scope.articles.push(nextPageContent[i]);
+								    }
+									console.log('page index : ' + $scope.pageIndex);
 								})
 					};
 				});
 
+		//config blue theme
+		app.config(function($mdThemingProvider) {
+			$mdThemingProvider.theme('default').primaryPalette('blue')
+					.accentPalette('orange');
+		});
+		
+		// scroll reach bootom
+		app.directive('scrolly', function () {
+		    return {
+		        restrict: 'A',
+		        link: function (scope, element, attrs) {
+		            var raw = element[0];		                
+		            element.bind('scroll', function () {
+		                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+		                    scope.$apply(attrs.scrolly);
+		                }
+		            });
+		        }
+		    };
+		});
+
+		//test connection
 		app.controller('MainCtrl', function($scope) {
 			$scope.name = 'World';
 		});
