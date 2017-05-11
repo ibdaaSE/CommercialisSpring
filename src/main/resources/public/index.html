@@ -1,169 +1,23 @@
 <html>
+
 <head>
-<title>Commercialis</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link href="/webjars/angular-material/1.1.3/angular-material.css"
-	type="text/css" rel="stylesheet" media="screen,projection" />
-	<style>
-      body {font-family: Segoe UI,Helvetica,sans-serif;}
-    </style>
-</head>
-<body ng-app="crudApp" ng-cloak>
-	<div ng-controller="listController" layout="column" layout-fill>
+  <meta charset="utf-8">
+  <title>CommercialisNg</title>
+  <base href="/">
 
-		<md-toolbar>
-		<div class="md-toolbar-tools">
-			<md-button class="md-icon-button" aria-label="More"> <md-icon
-				md-svg-icon="img/icons/more_vert.svg"></md-icon> </md-button>
-			<md-button aria-label="Vente"> Vente </md-button>
-			<md-button aria-label="Achat"> Achat </md-button>
-			<md-button aria-label="Stock"> Stock </md-button>
-			<md-button aria-label="Clients et fournisseurs"> Clients
-			et fournisseurs </md-button>
-			<md-button aria-label="Stock"> Stock </md-button>
-			<md-button aria-label="Statistiques"> Stock </md-button>
-			<span flex></span>
-			<md-button class="md-raised" aria-label="Learn More">
-			Options </md-button>
-			<md-button class="md-fab md-mini" aria-label="Favorite">
-			<md-icon md-svg-icon="img/icons/favorite.svg"></md-icon> </md-button>
-		</div>
-		</md-toolbar>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link href="styles.374f516096fa6d81e21b.bundle.css" rel="stylesheet"/></head>
 
+<body>
+  <app-root></app-root>
+<script type="text/javascript" src="inline.28b961868b22818049df.bundle.js"></script><script type="text/javascript" src="polyfills.6fd0ea22f809f9a8e008.bundle.js"></script><script type="text/javascript" src="scripts.a1ced5bc4e20ddc77a99.bundle.js"></script><script type="text/javascript" src="vendor.4098a2cf166a19c838c4.bundle.js"></script><script type="text/javascript" src="main.159a48657c01781d2b12.bundle.js"></script></body>
 
-		<div layout="row"
-			style="background: white; padding: 0px 15px 0px 15px;">
-
-			<h3 layout="column">
-				<span style="color: black">Gestion du stock</span>
-			</h3>
-			<span flex></span>
-			<div layout="column" layout-align="center" flex="30">
-				<md-input-container
-					style="padding: 0px;margin: 0px;min-height: 0px !important;max-height: 30px;">
-				<label for="searchField">Rechercher</label> <input id="searchField"
-					type="text" class="validate" ng-model="filter"
-					ng-change="filterArticles()"> </md-input-container>
-			</div>
-		</div>
-
-
-		<div layout="row"
-			style="background: white; padding: 0px 15px 0px 15px; margin: 0px;">
-			<h4 layout="row" flex="20" style="margin: 10px 0px 10px 0px;">
-				<span>Référence</span>
-			</h4>
-			<h4 layout="row" flex style="margin: 10px 0px 10px 0px;">
-				<span>Designation</span>
-			</h4>
-			<h4 layout="row" flex="10" layout-align="end"
-				style="margin: 10px 0px 10px 0px;">
-				<span>Quantité</span>
-			</h4>
-			<h4 layout="row" flex="10" layout-align="end"
-				style="margin: 10px 0px 10px 0px;">
-				<span>Prix publique</span>
-			</h4>
-		</div>
-
-		<md-divider></md-divider>
-
-
-		<div flex layout="column" layout-fill>
-			<md-content scrolly="getNextPage()"> <md-list-item
-				class="secondary-button-padding" ng-click="doPrimaryAction($event)"
-				ng-repeat="article in articles" flex>
-			<p layout="row" flex="20">
-				<span>{{article.reference}} </span>
-			</p>
-			<p layout="row" flex>
-				<span>{{article.designation}}</span>
-			</p>
-			<p layout="row" flex="10" layout-align="end">
-				<span>{{article.qtestock | number:2}}</span>
-			</p>
-			<p layout="row" flex="10" layout-align="end">
-				<span>{{article.prixpublic | number:2}}</span>
-			</p>
-			<md-divider></md-divider> </md-list-item> </md-content>
-		</div>
-	</div>
-	<script src="/webjars/angularjs/1.5.5/angular.js"></script>
-	<script src="/webjars/angularjs/1.5.5/angular-animate.js"></script>
-	<script src="/webjars/angularjs/1.5.5/angular-aria.js"></script>
-	<script src="/webjars/angularjs/1.5.5/angular-messages.js"></script>
-	<script src="/webjars/angular-material/1.1.3/angular-material.js"></script>
-	<script type="text/javascript">
-		// init module + filter controller
-		var app = angular.module('crudApp', [ 'ngMaterial' ]).controller(
-			'listController',
-			function($scope, $http) {
-				$scope.pageIndex = 0;
-				$http.get('/articles?filter=&pageIndex=0').success(function(data) {
-					$scope.articles = data;
-					$scope.pageIndex = $scope.pageIndex = data.length;
-				})
-				$scope.filterArticles = function() {
-					$scope.pageIndex = 0;
-					$http.get('/articles?filter=' + $scope.filter + '&pageIndex=0').success(
-						function(data) {
-	
-							$scope.articles = data;
-							$scope.pageIndex = $scope.pageIndex + data.length;
-							console.log('filter index : ' + $scope.pageIndex);
-						})
-				};
-				$scope.getNextPage = function() {
-					$http.get('/articles?filter=' + ($scope.filter == null ? '' : $scope.filter) + '&pageIndex=' + $scope.pageIndex).success(
-						function(nextPageContent) {
-							$scope.pageIndex = $scope.pageIndex + nextPageContent.length;
-							for (i in nextPageContent) {
-								$scope.articles.push(nextPageContent[i]);
-							}
-						})
-				};
-			});
-	
-		//config blue theme
-		app.config(function($mdThemingProvider) {
-			$mdThemingProvider.theme('default').primaryPalette('blue')
-				.accentPalette('orange');
-		});
-	
-		// scroll reach bottom
-		app.directive('scrolly', function() {
-			return {
-				restrict : 'A',
-				link : function(scope, element, attrs) {
-					var raw = element[0];
-					element.bind('scroll', function() {
-						if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-							scope.$apply(attrs.scrolly);
-						}
-					});
-				}
-			};
-		});
-	
-		//test connection
-		app.controller('MainCtrl', function($scope) {
-			$scope.name = 'World';
-		});
-	
-		app.run(function($window, $rootScope) {
-			$rootScope.online = navigator.onLine;
-			$window.addEventListener("offline", function() {
-				$rootScope.$apply(function() {
-					$rootScope.online = false;
-				});
-			}, false);
-			$window.addEventListener("online", function() {
-				$rootScope.$apply(function() {
-					$rootScope.online = true;
-				});
-			}, false);
-		});
-	</script>
-</body>
+<script>
+  $('.button-collapse').sideNav({
+      closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+      draggable: true // Choose whether you can drag to open on touch screens
+    }
+  );
+</script>
 </html>

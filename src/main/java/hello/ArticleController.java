@@ -15,10 +15,12 @@ public class ArticleController {
 	@Autowired 
 	private ArticleRepository articleRepository;
 	
-	@RequestMapping(path="/articles")
+	@RequestMapping(path="/api/articles")
 	public @ResponseBody List<Article> allArticles(@RequestParam(value="filter", defaultValue="") String filter, 
-			@RequestParam(value="pageIndex", defaultValue="0") Integer pageIndex) {
-		return articleRepository.getFiltredList(filter, "", "-1", 0, pageIndex);
+			@RequestParam(value="pageIndex", defaultValue="0") Integer pageIndex,
+			@RequestParam(value="filterAttribute", defaultValue="") String filterAttribute,
+			@RequestParam(value="advancedFilter", defaultValue="-1") String advancedFilter) {
+		return articleRepository.getFiltredList(filter, filterAttribute, advancedFilter, 20, pageIndex);
 	}
 
 }
