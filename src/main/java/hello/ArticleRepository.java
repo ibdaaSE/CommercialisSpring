@@ -1,7 +1,6 @@
 package hello;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ArticleRepository extends CrudRepository<Article, Integer>, ArticleRepositoryCustom {
-	
+public interface ArticleRepository extends JpaRepository<Article, Integer>, ArticleRepositoryCustom {
 }

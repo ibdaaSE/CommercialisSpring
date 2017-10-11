@@ -1,6 +1,6 @@
 package util;
 
-public class DatabaseQuery {
+public final class DatabaseQuery {
 
     public static final String SPLIT_FILTER = " ";
 
@@ -106,7 +106,7 @@ public class DatabaseQuery {
         return DatabaseQuery.getQueryJoinSearch(tables.split("\\s")[1], tables, attributs, filtres, joinAttributs, joinFiltres);
     }
 
-    public static String getQueryJoinSearch(String variable, String tables, String attributs, String filtres, String joinAttributs, String joinFiltres) {
+    public final static String getQueryJoinSearch(String variable, String tables, String attributs, String filtres, String joinAttributs, String joinFiltres) {
         String queryString = DatabaseQuery.getQuerySearch(variable, tables, attributs, filtres);
         String wherePart = DatabaseQuery.getQueryJoinWhere(joinAttributs, joinFiltres);
         if (!wherePart.isEmpty()) {

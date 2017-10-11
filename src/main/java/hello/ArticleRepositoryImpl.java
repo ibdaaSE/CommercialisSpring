@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 
 import util.DatabaseQuery;
 
@@ -15,7 +16,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 	private EntityManager em;
 
 	@Override
-	public List<Article> getFiltredList(String filtre, String filterAttribut, String filterValue, int maxRowPerPage,
+	public List<Article> findAll(@Param("filtre") String filtre, String filterAttribut, String filterValue, int maxRowPerPage,
 			int index) {
 
 		String querySearch = DatabaseQuery.getQueryJoinSearch("*", "Article a",
