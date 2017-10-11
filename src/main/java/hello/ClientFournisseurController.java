@@ -14,7 +14,7 @@ public class ClientFournisseurController {
 	@Autowired
 	private ClientFournisseurRepository clientFournisseurRepository;
 
-	@RequestMapping(path = "/api/Cfs")
+	@RequestMapping(path = "/api/CFs")
 	public @ResponseBody List getFiltredList(@RequestParam(value = "filter", defaultValue = "") String filter,
 			@RequestParam(value = "filterAttribute", defaultValue = "") String filterAttribute,
 			@RequestParam(value = "advancedFilter", defaultValue = "-1") String advancedFilter,
@@ -22,7 +22,7 @@ public class ClientFournisseurController {
 		return clientFournisseurRepository.findAll(filter, filterAttribute, advancedFilter, 20, pageIndex);
 	}
 
-	@RequestMapping(path = "/api/Cfs/count")
+	@RequestMapping(path = "/api/CFs/count")
 	public @ResponseBody Long countArticles(@RequestParam(value = "filter", defaultValue = "") String filter,
 			@RequestParam(value = "filterAttribute", defaultValue = "") String filterAttribute,
 			@RequestParam(value = "advancedFilter", defaultValue = "-1") String advancedFilter) {
